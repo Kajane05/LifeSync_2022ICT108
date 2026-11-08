@@ -1,24 +1,24 @@
 {
   "expo": {
     "name": "LifeSync",
-    "slug": "LifeSync",
+    "slug": "lifesync",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "scheme": "lifesync",
+    "android": {
+      "package": "com.lifesync.app"
+    },
     "ios": {
+      "bundleIdentifier": "com.lifesync.app",
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      "expo-sqlite",
+      "expo-secure-store",
+      "expo-status-bar",
+      "expo-sharing",
+      "expo-router"
+    ]
   }
 }
