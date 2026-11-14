@@ -1,0 +1,6 @@
+import React, { useEffect, useState } from 'react';
+import { Text, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Page, Label, Muted, Field, Action, Card } from '@/components/ui';
+import { useTheme } from '@/context/ThemeContext';
+export default function Profile() { const { colors } = useTheme(); const [name, setName] = useState(''); const [saved, setSaved] = useState(false); useEffect(() => { AsyncStorage.getItem('profileName').then(v => setName(v || '')); }, []); const save = async () => { await AsyncStorage.setItem('profileName', name.trim()); setSaved(true); }; return <Page><ScrollView><Label>Profile</Label><Muted>Personalise your LifeSync space.</Muted><Card><Text style={{ fontSize: 42, textAlign: 'center' }}>👤</Text><Text style={{ fontSize: 17, fontWeight: '800', textAlign: 'center', color: colors.text, marginTop: 8 }}>{name || 'Your profile'}</Text></Card><Field label="Your name" value={name} onChangeText={v => { setName(v); setSaved(false); }} placeholder="Enter your name"/><Action title="Save profile" onPress={save}/>{saved && <Muted style={{ marginTop: 10 }}>Profile saved on this device.</Muted>}</ScrollView></Page>; }
