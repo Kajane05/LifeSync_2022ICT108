@@ -18,7 +18,8 @@
       "expo-secure-store",
       "expo-status-bar",
       "expo-sharing",
-      "expo-router"
+      "expo-router",
+      "@react-native-community/datetimepicker"
     ]
   }
 }
