@@ -234,7 +234,7 @@ export default function MainScreen() {
             const result = await DocumentPicker.getDocumentAsync({
                 type: '*/*',
                 multiple: true,
-                copyToCacheDirectory: true,
+                copyToCacheDirectory: false,
             });
 
             if (result.canceled) return;
