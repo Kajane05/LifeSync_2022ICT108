@@ -3,6 +3,7 @@ import * as Crypto from 'expo-crypto';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as SecureStore from 'expo-secure-store';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, BackHandler, Linking, PanResponder, Pressable, ScrollView, StatusBar, Text, TextInput, View } from 'react-native';
@@ -42,6 +43,7 @@ export default function MainScreen() {
     // Dropdown states
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const [showPriorityDropdown, setShowPriorityDropdown] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const [editing, setEditing] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -771,12 +773,46 @@ export default function MainScreen() {
                     </View>
                 )}
 
-                {field(
-                    'Due date (YYYY-MM-DD)',
-                    form.dueDate,
-                    v => setForm({ ...form, dueDate: v }),
-                    '2026-11-10'
-                )}
+                <View style={{ marginBottom: 10 }}>
+                    <Text style={s.label}>Due date</Text>
+                    <Pressable
+                        onPress={() => setShowDatePicker(true)}
+                        style={[
+                            s.input,
+                            {
+                                justifyContent: 'center',
+                                minHeight: 48,
+                            },
+                        ]}
+                    >
+                        <Text style={{ color: c.text, fontSize: 15 }}>
+                            {form.dueDate || 'Select due date'}
+                        </Text>
+                    </Pressable>
+                    {showDatePicker && (
+                        <DateTimePicker
+                            value={
+                                /^\d{4}-\d{2}-\d{2}$/.test(form.dueDate)
+                                    ? new Date(`${form.dueDate}T12:00:00`)
+                                    : new Date()
+                            }
+                            mode="date"
+                            display="default"
+                            onChange={(event, selectedDate) => {
+                                setShowDatePicker(false);
+                                if (event.type === 'dismissed' || !selectedDate) return;
+
+                                const year = selectedDate.getFullYear();
+                                const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                                const day = String(selectedDate.getDate()).padStart(2, '0');
+                                setForm(previous => ({
+                                    ...previous,
+                                    dueDate: `${year}-${month}-${day}`,
+                                }));
+                            }}
+                        />
+                    )}
+                </View>
 
                 <View
                     style={{
